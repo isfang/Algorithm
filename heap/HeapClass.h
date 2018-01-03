@@ -66,6 +66,24 @@ class MaxHeap {
             this->capacity = capacity;
         }
 
+        //通过heapify的方式创建一个堆,而不是上面的空堆
+        MaxHeap(Item arr[], int n) {
+            //因为堆目前是索引从1开始的,所以要+1
+            data = new Item[n+1];
+            capacity = n;
+            for (int i = 0; i < n; ++i) {
+                data[i+1] = arr[i];
+            }
+            count = n;
+
+            //执行heapify操作
+            //count/2; 这个值正好是除去全部的叶子节点,剩下的最大的一个不是节点的堆
+            //然后遍历,执行shiftdown的操作就可以将全部的数据都进行一遍shiftdown的操作
+            for (int i = count/2; i >=1 ; --i) {
+                shiftDown(i);
+            }
+        }
+
         MaxHeap() {
 
         }
