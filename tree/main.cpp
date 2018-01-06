@@ -56,6 +56,20 @@ public:
         return search(root, key);
     }
 
+    //前序遍历
+    void preOrder() {
+
+    }
+    //中序遍历
+    void inOrder() {
+
+    }
+    //后序遍历
+    void postOrder() {
+
+    }
+
+
 private:
     //插入从根节点开始
     //比当前节点小就插入到左孩子,大就插入到右孩子,一直插到底(即下一个左孩子或者右孩子为空的时候)
@@ -115,6 +129,38 @@ private:
         }
         else {
             return search(node->right, key);
+        }
+    }
+
+
+//前序遍历
+    void preOrder(Node *node) {
+        cout<<node->key<<endl;
+        preOrder(node->left);
+        preOrder(node->right);
+    }
+    //中序遍历
+    void inOrder(Node *node) {
+        inOrder(node->left);
+        cout<<node->key<<endl;
+        inOrder(node->right);
+    }
+    //后序遍历
+    void postOrder(Node *node) {
+        postOrder(node->left);
+        postOrder(node->right);
+        cout<<node->key<<endl;
+    }
+
+    //释放node 与其下面的全部节点,使用后序遍历
+    void destory(Node *node) {
+        if (node != NULL) {
+            destory(node->left);
+            destory(node->right);
+
+            delete node;
+
+            count --;
         }
     }
 };
