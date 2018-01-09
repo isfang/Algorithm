@@ -66,6 +66,15 @@ public:
         return g[v][w];
     }
 
+    // 显示图的信息
+    void show(){
+
+        for( int i = 0 ; i < n ; i ++ ){
+            for( int j = 0 ; j < n ; j ++ )
+                cout<<g[i][j]<<"\t";
+            cout<<endl;
+        }
+    }
     // 矩阵迭代器, 传入一个图和一个顶点,
     // 迭代在这个图中和这个顶点向连的所有顶点
     class adjIterator {
@@ -88,7 +97,7 @@ public:
             index = -1;
             return next();
         }
- 
+
         // 返回图G中与顶点v相连接的下一个顶点
         int next(){
             // 若没有顶点和v相连接, 则返回-1

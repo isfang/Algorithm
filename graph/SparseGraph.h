@@ -56,6 +56,17 @@ public:
         return false;
     }
 
+    // 显示图的信息
+    void show(){
+
+        for( int i = 0 ; i < n ; i ++ ){
+            cout<<"vertex "<<i<<":\t";
+            for( int j = 0 ; j < g[i].size() ; j ++ )
+                cout<<g[i][j]<<"\t";
+            cout<<endl;
+        }
+    }
+
     // 邻边迭代器, 传入一个图和一个顶点,
     // 迭代在这个图中和这个顶点向连的所有顶点
     class adjIterator {
