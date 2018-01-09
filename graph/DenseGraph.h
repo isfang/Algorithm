@@ -88,7 +88,7 @@ public:
             index = -1;
             return next();
         }
-
+ 
         // 返回图G中与顶点v相连接的下一个顶点
         int next(){
             // 若没有顶点和v相连接, 则返回-1
