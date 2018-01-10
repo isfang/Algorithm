@@ -1,3 +1,10 @@
+//
+// Created by liuyubobobo on 9/22/16.
+//
+
+#ifndef INC_05_DFS_AND_COMPONENTS_READGRAPH_H
+#define INC_05_DFS_AND_COMPONENTS_READGRAPH_H
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -41,3 +48,5 @@ public:
         }
     }
 };
+
+#endif //INC_05_DFS_AND_COMPONENTS_READGRAPH_H

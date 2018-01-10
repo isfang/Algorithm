@@ -3,15 +3,28 @@
 #include "DenseGraph.h"
 #include "SparseGraph.h"
 #include "ReadGraph.h"
+#include "Components.h"
 
-int main(){
 
-//    vector<int> arr({1,2,3,4});
-//    vector<int>::iterator iter;
-//    for (int iter  = arr.begin; iter != arr.end ; ++iter ) {
-//        cout<<iter<<endl;
-//    }
+void _test() {
+    string filename1 = "testG1.txt";
+    SparseGraph g1 = SparseGraph(13, false);
 
+    ReadGraph<SparseGraph> readGraph1(g1, filename1);
+    Component<SparseGraph> component1(g1);
+    cout<<"TestG1.txt, Component Count: "<<component1.count()<<endl;
+
+    cout<<endl;
+
+    // TestG2.txt
+    string filename2 = "testG2.txt";
+    SparseGraph g2 = SparseGraph(7, false);
+    ReadGraph<SparseGraph> readGraph2(g2, filename2);
+    Component<SparseGraph> component2(g2);
+    cout<<"TestG2.txt, Component Count: "<<component2.count()<<endl;
+}
+
+void test(){
     int N = 20;
     int M = 100;
 
@@ -76,17 +89,25 @@ int main(){
 
     // 使用两种图的存储方式读取testG2.txt文件
     filename = "testG2.txt";
-    SparseGraph g5( 6 , false );
+    SparseGraph g5( 7 , false );
     ReadGraph<SparseGraph> readGraph3( g5 , filename );
     cout<<"test G2 in Sparse Graph:" << endl;
     g5.show();
 
     cout<<endl;
 
-    DenseGraph g6( 6 , false );
+    DenseGraph g6( 7 , false );
     ReadGraph<DenseGraph> readGraph4( g6 , filename );
     cout<<"test G2 in Dense Graph:" << endl;
     g6.show();
 
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+}
+
+int main(){
+    test();
+    _test();
     return 0;
 }
