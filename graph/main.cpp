@@ -4,7 +4,8 @@
 #include "SparseGraph.h"
 #include "ReadGraph.h"
 #include "Components.h"
-
+#include "Path.h"
+#include "ShortestPath.h"
 
 void _test() {
     string filename1 = "testG1.txt";
@@ -106,8 +107,43 @@ void test(){
     cout<<endl;
 }
 
+void testPath(){
+    string filename = "testG.txt";
+    SparseGraph g = SparseGraph(7, false);
+    ReadGraph<SparseGraph> readGraph(g, filename);
+    g.show();
+    cout<<endl;
+
+    Path<SparseGraph> path(g,0);
+    cout<<"Path from 0 to 6 : " << endl;
+    path.showPath(6);
+}
+
+void testShortest(){
+    string filename = "testG.txt";
+    SparseGraph g = SparseGraph(7, false);
+    ReadGraph<SparseGraph> readGraph(g, filename);
+    g.show();
+    cout<<endl;
+
+    // 比较使用深度优先遍历和广度优先遍历获得路径的不同
+    // 广度优先遍历获得的是无权图的最短路径
+    Path<SparseGraph> dfs(g,0);
+    cout<<"DFS : ";
+    dfs.showPath(6);
+
+    ShortestPath<SparseGraph> bfs(g,0);
+    cout<<"BFS : ";
+    bfs.showPath(6);
+
+}
+
 int main(){
+
     test();
     _test();
+    testPath();
+    cout<<endl;
+    testShortest();
     return 0;
 }
