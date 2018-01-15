@@ -280,13 +280,302 @@ Node* insert(Node *node, Key key, Value value) {
           // successor->left = removeMax(node->left);
           // successor->right = node->right;
 
-
           delete node;
           count --;
-
+    
           return successor;
       }
   }
   ```
 
-  ​
+### 图-无权图
+
+无权图 根据每个节点有多少边可以分为稀疏图(SparseGraph)跟稠密图(DenseGraph),都可以用一个二维数组表示,不同的是稀疏图不需要按钮节点个数全部初始化二维数组,有多少条边就放多少内容(节点),而稠密图不一样稠密图利用二维数组创建一个矩阵存放是否有相对应的边, 存放需要初始化全部的二维数组为false
+
+* 基本结构
+  * 稀疏图(SparseGraph),可以使用一个邻接表来表示,数据结构与构造方法如下
+
+    ```
+    //稀疏图-邻接表
+    class SparseGraph {
+    private:
+        //节点数,变数
+        int n,m;
+        //是不是有向图
+        bool directed;
+        // 图的具体数据
+        vector<vector<int> > g;
+    public:
+        SparseGraph(int n, bool directed) {
+            assert(n >= 0);
+            this->n = n;
+
+            //初始化没有边
+            this->m = 0;
+
+            this->directed =directed;
+
+            // g初始化为n个空的vector, 表示每一个g[i]都为空, 即没有任和边
+            g = vector<vector<int> >(n, vector<int>());
+        }
+    }
+    ```
+
+
+  * 稠密图(DenseGraph),可以使用一个矩阵来表示,数据结构与构造方法如下
+
+    ```
+    //稠密图-邻接矩阵
+    class DenseGraph {
+    private:
+        //节点数,变数
+        int n,m;
+        //是不是有向图
+        bool directed;
+
+        // 图的具体数据
+        vector<vector<bool> > g;
+
+    public:
+        DenseGraph(int n, bool directed){
+            assert(n >= 0);
+            this->n = n;
+
+            //初始化没有边
+            this->m = 0;
+
+            this->directed =directed;
+
+            // g初始化为n*n的布尔矩阵, 每一个g[i][j]均为false, 表示没有任和边
+            g = vector<vector<bool> >(n, vector<bool>(n, false));
+        }
+     }
+    ```
+
+    ​
+
+* 插入一条边,建立一条边也就是建立两个点的关系
+
+  * 稀疏图(SparseGraph)
+
+    因为是邻接表的结构,所以,增加一条边就是新增一个元素到数组中
+
+    ```
+    void addEdge(int v, int w) {
+      assert( v >= 0 && v < n );
+      assert( w >= 0 && w < n );
+
+      g[v].push_back(w);
+
+      //v w不一样就处理了自环边
+      if( v!= w && !directed) {
+          g[w].push_back(v);
+      }
+      m++;
+    }
+
+    // 验证图中是否有从v到w的边
+    bool hasEdge( int v , int w ){
+
+      assert( v >= 0 && v < n );
+      assert( w >= 0 && w < n );
+
+      for( int i = 0 ; i < g[v].size() ; i ++ )
+          if( g[v][i] == w )
+              return true;
+      return false;
+    }
+    ```
+
+  * 稠密图(DenseGraph)
+
+    矩阵的结构,就是改变矩阵中原来的布尔值, 暂时不处理自环边
+
+    因为判断vw两者原本有没有边存在要进行一次遍历,所以添加一条新边的时候暂时不判断
+
+    ```
+    void addEdge (int v, int w) {
+      assert( v >= 0 && v < n );
+      assert( w >= 0 && w < n );
+
+      //如果已经有了
+      if(hasEdge(v,w)) {
+          return;
+      }
+
+      g[v][w] = true;
+
+      if(!directed) {
+          g[w][v] = true;
+      }
+
+      m ++;
+    }
+
+    bool hasEdge(int v, int w){
+      assert( v >= 0 && v < n );
+      assert( w >= 0 && w < n );
+      return g[v][w];
+    }
+    ```
+
+* 图的遍历
+
+  图的遍历,可以分别遍历稀疏图与稠密图的二维数组,但是这样就不能统一使用接口,所以可以分别通过迭代器进行迭代
+
+  ```
+  // O(E)
+  for( int v = 0 ; v < N ; v ++ ){
+      cout<<v<<" : ";
+      SparseGraph::adjIterator adj(g1, v);
+      for (int w = adj.begin(); !adj.end(); w=adj.next()){
+          cout<<w<<" ";
+      }
+      cout<<endl;
+  }
+  cout<<endl;
+  cout<<endl;
+
+  // O(V^2)
+  for( int v = 0 ; v < N ; v ++ ){
+      cout<<v<<" : ";
+      DenseGraph::adjIterator adj( g2 , v );
+      for( int w = adj.begin() ; !adj.end() ; w = adj.next() )
+          cout<<w<<" ";
+      cout<<endl;
+  }
+  ```
+
+  迭代器生成具体规则如下
+
+  - 稀疏图(SparseGraph)
+
+    ```
+    // 邻边迭代器, 传入一个图和一个顶点,
+    // 迭代在这个图中和这个顶点向连的所有顶点
+    class adjIterator {
+    private:
+        SparseGraph &G;
+        int v;
+        //迭代到哪里了
+        int index;
+    public:
+        //:G(graph),因为传的是一个引用,所以可以这样去初始化
+        adjIterator(SparseGraph &graph, int v):G(graph) {
+            this->v = v;
+            this->index = 0;
+        }
+
+        ~adjIterator(){}
+
+        // 返回图G中与顶点v相连接的第一个顶点
+        int begin(){
+            index = 0;
+            if(G.g[v].size() > 0){
+                return G.g[v][index];
+            }
+            // 若没有顶点和v相连接, 则返回-1
+            return -1;
+        }
+
+        // 返回图G中与顶点v相连接的下一个顶点
+        int next(){
+            index ++;
+            if(G.g[v].size() > index) {
+                return G.g[v][index];
+            }
+            // 若没有顶点和v相连接, 则返回-1
+            return -1;
+        }
+
+        // 查看是否已经迭代完了图G中与顶点v相连接的所有顶点
+        int end() {
+            return G.g[v].size() <= index;
+        }
+    };
+    ```
+
+    ​
+
+  - 稠密图(DenseGraph)
+
+    ```
+    // 矩阵迭代器, 传入一个图和一个顶点,
+    // 迭代在这个图中和这个顶点向连的所有顶点
+    class adjIterator {
+    private:
+        DenseGraph &G;
+        int v;
+        //迭代到哪里了
+        int index;
+    public:
+        //:G(graph),因为传的是一个引用,所以可以这样去初始化
+        adjIterator(DenseGraph &graph, int v):G(graph) {
+            this->v = v;
+            this->index = -1;
+        }
+
+        ~adjIterator(){}
+
+        // 返回图G中与顶点v相连接的第一个顶点
+        int begin(){
+            index = -1;
+            return next();
+        }
+
+        // 返回图G中与顶点v相连接的下一个顶点
+        int next(){
+            // 若没有顶点和v相连接, 则返回-1
+            for ( index +=1; index < G.V() ; index++) {
+                if(G.g[v][index]){
+                    return index;
+                }
+            }
+            return -1;
+        }
+
+        // 查看是否已经迭代完了图G中与顶点v相连接的所有顶点
+        int end() {
+            return index >= G.V();
+        }
+    };
+    ```
+
+    ​
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* ​
+* 插入一条边,建立一条边也就是建立两个点之间的关系
+  * 稀疏图(SparseGraph)
+  * 稠密图(DenseGraph)
