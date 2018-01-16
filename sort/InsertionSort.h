@@ -1,45 +1,41 @@
-//
-// Created by liuyubobobo on 7/23/16.
-//
-
-#ifndef INC_05_QUICK_SORT_INSERTIONSORT_H
-#define INC_05_QUICK_SORT_INSERTIONSORT_H
-
 #include <iostream>
-#include <algorithm>
+#include <cassert>
 
 using namespace std;
 
-
-template<typename T>
-void insertionSort(T arr[], int n){
+void insertionSort(int arr[], int n){
 
     for( int i = 1 ; i < n ; i ++ ) {
 
-        T e = arr[i];
-        int j;
-        for (j = i; j > 0 && arr[j-1] > e; j--)
-            arr[j] = arr[j-1];
-        arr[j] = e;
+        // 寻找元素arr[i]合适的插入位置
+        // 写法1
+       for( int j = i ; j > 0 ; j-- )
+           if( arr[j] < arr[j-1] )
+               swap( arr[j] , arr[j-1] );
+           else
+               break;
+
+        // 写法2
+        // for( int j = i ; j > 0 && arr[j] < arr[j-1] ; j -- )
+        //     swap( arr[j] , arr[j-1] );
+
     }
 
     return;
 }
 
-// 对arr[l...r]范围的数组进行插入排序
-template<typename T>
-void insertionSort(T arr[], int l, int r){
-
-    for( int i = l+1 ; i <= r ; i ++ ) {
-
-        T e = arr[i];
+void insertionSort2(int arr[], int n){
+    for( int i = 1 ; i < n ; i ++ ) {
+        //先把将要被排序的元素备份一下
+        int e = arr[i];
+        //j代表元素 e 应该要插入的位置
         int j;
-        for (j = i; j > l && arr[j-1] > e; j--)
+        //这个条件代表的是 arr[j-1] > e j的前一个元素比e要大,那么继续遍历,直到e>j的前一个元素
+        for( j = i; j > 0 && arr[j-1] > e; j-- ) {
+            //j的前一个元素比e要大,往后挪
             arr[j] = arr[j-1];
+        }
         arr[j] = e;
     }
-
     return;
 }
-
-#endif //INC_05_QUICK_SORT_INSERTIONSORT_H
