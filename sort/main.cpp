@@ -2,6 +2,7 @@
 #include "selectionSort.h"
 #include "InsertionSort.h"
 #include "mergeSort.h"
+#include "QuickSort.h"
 
 void testSelectionSort () {
     int a[10] = {10,9,8,7,6,5,4,3,2,1};
@@ -43,6 +44,14 @@ void testMergeSort2 () {
     cout<<endl;
 }
 
+void testQuickSort1 () {
+    int a[10] = {10,9,8,7,6,5,4,3,2,1};
+    quickSort1(a,10);
+    for( int i = 0 ; i < 10 ; i ++ )
+        cout<<a[i]<<" ";
+    cout<<endl;
+}
+
 int main () {
 
     //测试选择排序
@@ -59,6 +68,9 @@ int main () {
     
     //测试归并排序优化
     testMergeSort2();
+
+    //测试快速排序
+    testQuickSort1();
     
     return 0;
 }
