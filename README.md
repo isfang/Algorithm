@@ -2,6 +2,9 @@
 
 ## 排序
 ### 最简单的选择排序
+
+n方复杂度
+
 找当前数组中最小的一个放到最前面,然后继续寻找,思路很简单
 
 ```
@@ -20,11 +23,15 @@ void selectionSort(int arr[], int n){
 
 ### 插入排序
 
+n方复杂度
+
 * 普通写法
 
-  就跟我们打牌一样, 把牌一张一张的放到合适的位置 
+  就跟我们打牌一样, 把牌一张一张的放到合适的位置 两个相邻的数进行比较后面的比前面的小就交换,然后再往前进行相邻元素比较,如果后面的比前面的大就退出循环 
 
   也就是选择一个元素,一个一个跟前面的有序数组比大小,直到找到合适的位置,代码如下
+
+  但是这种写法比选择排序的效率要低
 
   ```
   void insertionSort(int arr[], int n){
@@ -47,7 +54,8 @@ void selectionSort(int arr[], int n){
 
 * 优化改进的写法
   上面的这种方式要交换多次元素,所以减少交换次数的优化,去寻找最适合当前元素的位置,找到后 再进行交互
-
+  
+  点就在于赋值的效率要高于优化的效率,如果数组本身的顺序又是无序的那么效率会更加高
   ```
   void insertionSort2(int arr[], int n){
       for( int i = 1 ; i < n ; i ++ ) {
@@ -72,7 +80,7 @@ void selectionSort(int arr[], int n){
 
 * 基本实现
 
-  O(nlogn)的复杂度
+  O(nlogn)的复杂度， 但是多了一点On的空间 但是空间并不贵。。。
 
   其基本思路就是将数组分成二组A，B，如果这二组组内的数据都是有序的，那么就可以很方便的将这二组数据进行排序。
 
@@ -117,7 +125,7 @@ void selectionSort(int arr[], int n){
               arr[k] = aux[j-l]; j ++;
           }
           else if( j > r ){  // 如果右半部分元素已经全部处理完毕
-              arr[k] = aux[i-l]; i ++;
+              arr[k] = aux[i-l]; i ++;  //i - l l is L  not 1
           }
           else if( aux[i-l] < aux[j-l] ) {  // 左半部分所指元素 < 右半部分所指元素
               arr[k] = aux[i-l]; i ++;
@@ -233,7 +241,7 @@ void selectionSort(int arr[], int n){
   }
   ```
 
-  ​
+  
 
 ## heap
 
@@ -420,7 +428,7 @@ Node* insert(Node *node, Key key, Value value) {
   }
   ```
 
-  ​
+  
 
 * 删除最大最小节点,很简单递归,左节点或者右节点
 
@@ -587,7 +595,7 @@ Node* insert(Node *node, Key key, Value value) {
      }
     ```
 
-    ​
+    
 
 * 插入一条边,建立一条边也就是建立两个点的关系
 
@@ -730,7 +738,7 @@ Node* insert(Node *node, Key key, Value value) {
     };
     ```
 
-    ​
+    
 
   - 稠密图(DenseGraph)
 
